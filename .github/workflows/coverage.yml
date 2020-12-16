@@ -1,0 +1,26 @@
+name: Coverage test
+on: pull_request
+
+jobs:
+  test-cov-report:
+    name: Test code coverage report
+    runs-on: ubuntu-latest
+    env:
+      # TODO: パラメータの二重メンテは面倒なので、workspace-coverageはなくす(こちらで統一する)
+      PARAMS:
+        -v --root ./sample1 --ignore-tests -o Html Lcov --output-dir .
+        
+    steps:
+      - uses: actions/checkout@v2.0.0
+
+      - name: Run cargo-tarpaulin
+        uses: actions-rs/tarpaulin@v0.1
+        with:
+          version: '0.13.3'
+          args: ${{env.PARAMS}}
+
+      - name: Apply code coverage report
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./lcov.info

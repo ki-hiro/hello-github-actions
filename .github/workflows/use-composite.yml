@@ -26,14 +26,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Run install-components
         uses: ./.github/actions/install-components
         with:
           additional-apt-pkg: libopencv-dev
       
-      - name: Show LD_LIBRARY_PATH
-        run: echo $LD_LIBRARY_PATH
+      - name: Show environment variables
+        run: |
+          echo $CARGO_TARGET_DIR
+          echo $LD_LIBRARY_PATH
 
       - name: test cargo
         working-directory: /work/sample1

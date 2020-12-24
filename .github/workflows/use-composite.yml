@@ -25,3 +25,9 @@ jobs:
         uses: ./.github/actions/install-components
         with:
           additional-apt-pkg: libopencv-dev
+      
+      - name: test cargo
+        working-directory: /work/sample1
+        run: |
+          cargo --version
+          cargo test

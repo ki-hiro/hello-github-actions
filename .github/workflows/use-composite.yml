@@ -6,7 +6,5 @@ jobs:
     name: Test composite run steps action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
       - name: Run composite
         uses: ./.github/actions/composite-test

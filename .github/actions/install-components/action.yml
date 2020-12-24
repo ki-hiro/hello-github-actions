@@ -3,7 +3,7 @@ description: 'Install build components'
 inputs:
   additional-apt:
     description: 'additional packages installed by apt'
-    required: false
+    required: true
     default: ''
   protobuf-version:
     description: 'protobuf version'

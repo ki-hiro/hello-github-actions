@@ -5,6 +5,9 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+  flag:
+    description: 'flag'
+    default: true
 outputs:
   random-number: 
     description: "Random number"
@@ -19,3 +22,12 @@ runs:
       shell: bash
 #     - run: ${{ github.action_path }}/goodbye.sh
 #       shell: bash
+    - run: |
+        echo flag: ${{ inputs.flag }}
+        if "${{ inputs.flag }}"; then
+          echo flag is true
+        else
+          echo flag is false
+        fi
+      shell: bash
+

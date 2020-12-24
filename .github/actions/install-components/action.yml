@@ -22,22 +22,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Show inputs
-      run: |
-        echo additional-apt-pkg ${{ inputs.additional-apt-pkg }}
-        echo protobuf-version ${{ inputs.protobuf-version }}
-        echo rust-version ${{ inputs.rust-version }}
-        echo snpe-version ${{ inputs.snpe-version }}
-        echo enable-rust-android ${{ inputs.enable-rust-android }}
-      shell: bash
-
+    # 必要環境変数を設定。set-envは非推奨になったので使わない
+    #   See: https://qiita.com/shonansurvivors/items/f256a0443d346f09448e
     - name: Set environment variables
       run: |
-        # 必要環境変数を設定。set-envは非推奨になったので使わない
-        #   See: https://qiita.com/shonansurvivors/items/f256a0443d346f09448e
         export SNPE_LIB_PATH=/work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{ inputs.snpe-version }}/lib/x86_64-linux-clang
         echo "CARGO_TARGET_DIR=${{ inputs.cargo-target-dir }}" >> $GITHUB_ENV
         echo "LD_LIBRARY_PATH=$SNPE_LIB_PATH:${{ inputs.cargo-target-dir }}/debug" >> $GITHUB_ENV
+        echo "SNPE_VERSION=${{ $inputs.snpe-version }}" >> $GITHUB_ENV
       shell: bash
 
     # docker上の/work/...という場所に依存したコードがあるため、シンボリックリンクを作成して対応
@@ -47,9 +39,10 @@ runs:
         ls /work
       shell: bash
 
+    # ビルド/実行に必要なpackageのインストール
+    # ccが環境に含まれていないためにcargo buildが失敗する。そのため、build-essentialを入れている
     - name: Install required packages
       run: |
-        # ccが環境に含まれていないためにcargo buildが失敗する。そのため、build-essentialを入れている
         sudo apt update
         sudo apt install -y build-essential libeigen3-dev ${{ inputs.additional-apt-pkg }}
       shell: bash

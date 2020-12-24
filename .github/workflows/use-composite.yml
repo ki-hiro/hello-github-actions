@@ -9,3 +9,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run composite
         uses: ./.github/actions/composite-test
+        with:
+          who-to-greet: test-composite

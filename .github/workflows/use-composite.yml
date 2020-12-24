@@ -4,7 +4,7 @@ on: push
 env:
     # TODO: dockerで定義している変数と同期
     SNPE_VERSION: 1.42
-    LD_LIBRARY_PATH: /work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_1.42/lib/x86_64-linux-clang
+    CARGO_TARGET_DIR: /work/chart-edge-ai/target
 
 jobs:
   test-composite:
@@ -24,6 +24,10 @@ jobs:
   test-install-components:
     name: Test composite run steps action (install-components)
     runs-on: ubuntu-latest
+    env:
+      LD_LIBRARY_PATH: |
+        /work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{env.SNPE_VERSION}}/lib/x86_64-linux-clang:
+        ${{env.CARGO_TARGET_DIR}}/debug
     steps:
       - uses: actions/checkout@v2
       - name: Show LD_LIBRARY_PATH

@@ -26,20 +26,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set LD_LIBRARY_PATH
-        run: |
-          # LD_LIBRARY_PATHを設定。set-envは非推奨になったので使わない
-          #   See: https://qiita.com/shonansurvivors/items/f256a0443d346f09448e
-          export SNPE_LIB_PATH=/work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{env.SNPE_VERSION}}/lib/x86_64-linux-clang
-          echo "LD_LIBRARY_PATH=$SNPE_LIB_PATH:${{env.CARGO_TARGET_DIR}}" >> $GITHUB_ENV
-      - name: Show LD_LIBRARY_PATH
-        run: echo $LD_LIBRARY_PATH
-
+      
       - name: Run install-components
         uses: ./.github/actions/install-components
         with:
           additional-apt-pkg: libopencv-dev
       
+      - name: Show LD_LIBRARY_PATH
+        run: echo $LD_LIBRARY_PATH
+
       - name: test cargo
         working-directory: /work/sample1
         run: |

@@ -1,5 +1,5 @@
-name: 'Install build components'
-description: 'Install build components'
+name: 'Install components'
+description: 'Install components'
 inputs:
   additional-apt-pkg:
     description: 'Additionally install specified apt packages'
@@ -35,7 +35,7 @@ runs:
       run: |
         # 必要環境変数を設定。set-envは非推奨になったので使わない
         #   See: https://qiita.com/shonansurvivors/items/f256a0443d346f09448e
-        export SNPE_LIB_PATH=/work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{env.SNPE_VERSION}}/lib/x86_64-linux-clang
+        export SNPE_LIB_PATH=/work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{ inputs.snpe-version }}/lib/x86_64-linux-clang
         echo "CARGO_TARGET_DIR=${{ inputs.cargo-target-dir }}" >> $GITHUB_ENV
         echo "LD_LIBRARY_PATH=$SNPE_LIB_PATH:${{ inputs.cargo-target-dir }}" >> $GITHUB_ENV
       shell: bash

@@ -4,7 +4,7 @@ on: push
 env:
     # TODO: dockerで定義している変数と同期
     SNPE_VERSION: 1.42
-    LD_LIBRARY_PATH: /work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{ env.SNPE_VERSION }}/lib/x86_64-linux-clang
+    LD_LIBRARY_PATH: /work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_1.42/lib/x86_64-linux-clang
 
 jobs:
   test-composite:

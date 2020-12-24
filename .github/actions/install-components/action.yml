@@ -1,0 +1,24 @@
+name: 'Install build components'
+description: 'Install build components'
+inputs:
+  additional-apt:
+    description: 'additional packages installed by apt'
+    required: false
+    default: ''
+  protobuf-version:
+    description: 'protobuf version'
+    required: true
+    default: '3.2.0'
+  rust-version:
+    description: 'Rust version'
+    required: true
+    default: 'nightly-2020-08-29'
+runs:
+  using: "composite"
+  steps: 
+    - run: echo additional-apt ${{ inputs.additional-apt }}.
+      shell: bash
+    - run: echo protobuf-version ${{ inputs.protobuf-version }}.
+      shell: bash
+    - run: echo rust-version ${{ inputs.rust-version }}.
+      shell: bash

@@ -11,3 +11,14 @@ jobs:
         uses: ./.github/actions/composite-test
         with:
           who-to-greet: test-composite
+  test-install-components:
+    name: Test composite run steps action (install-components)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run install-components
+        uses: ./.github/actions/install-components
+        with:
+          additional-apt: libopencv-dev
+          #protobuf-version: 3.2.1
+          #rust-version: nightly-2020-10-11

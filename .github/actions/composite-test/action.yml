@@ -14,7 +14,9 @@ runs:
   steps: 
     - run: echo Hello ${{ inputs.who-to-greet }}.
       shell: bash
-    - uses: actions/checkout@v2
+    - uses: arduino/setup-protoc@v1
+      with:
+        version: ${{env.PROTOBUF_VERSION}}
     - id: random-number-generator
       run: echo "::set-output name=random-id::$(echo $RANDOM)"
       shell: bash

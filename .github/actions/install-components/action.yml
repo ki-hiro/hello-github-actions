@@ -3,23 +3,18 @@ description: 'Install build components'
 inputs:
   additional-apt-pkg:
     description: 'Additionally install specified apt packages'
-    required: true
     default: ''
   protobuf-version:
     description: 'protobuf version'
-    required: true
     default: '3.2.0'
   rust-version:
     description: 'Rust version'
-    required: true
     default: 'nightly-2020-08-29'
   snpe-version:
     description: 'SNPE version'
-    required: true
     default: '1.42'
   enable-rust-android:
     description: 'Using Rust target aarch64-linux-android'
-    required: true
     default: false
 runs:
   using: "composite"
@@ -62,7 +57,10 @@ runs:
         export RUST_VERSION=${{ inputs.rust-version }}
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain ${RUST_VERSION} -y
         #rustup override set ${{ inputs.rust-version }}
-        # TODO: if分岐
-        rustup target add aarch64-linux-android
+        
+        if "${{ inputs.enable-rust-android }}"; then
+          rustup target add aarch64-linux-android
+        fi
+
         rustup component add rustfmt clippy
       shell: bash

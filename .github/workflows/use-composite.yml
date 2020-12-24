@@ -17,7 +17,6 @@ jobs:
           who-to-greet: test-composite
           flag: false
   test-install-components:
-    if: false
     name: Test composite run steps action (install-components)
     runs-on: ubuntu-latest
     steps:

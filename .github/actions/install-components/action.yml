@@ -10,12 +10,12 @@ inputs:
   rust-version:
     description: 'Rust version'
     default: 'nightly-2020-08-29'
-  snpe-version:
-    description: 'SNPE version'
-    default: '1.42'
   enable-rust-android:
     description: 'Using Rust target aarch64-linux-android'
     default: false
+  snpe-version:
+    description: 'SNPE version'
+    default: '1.42'
   cargo-target-dir:
     description: 'CARGO_TARGET_DIR'
     default: '/work/chart-edge-ai/target'
@@ -31,13 +31,13 @@ runs:
         echo enable-rust-android ${{ inputs.enable-rust-android }}
       shell: bash
 
-    - name: Set environment variables (CARGO_TARGET_DIR/LD_LIBRARY_PATH)
+    - name: Set environment variables
       run: |
-        # LD_LIBRARY_PATHを設定。set-envは非推奨になったので使わない
+        # 必要環境変数を設定。set-envは非推奨になったので使わない
         #   See: https://qiita.com/shonansurvivors/items/f256a0443d346f09448e
         export SNPE_LIB_PATH=/work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{env.SNPE_VERSION}}/lib/x86_64-linux-clang
         echo "CARGO_TARGET_DIR=${{ inputs.cargo-target-dir }}" >> $GITHUB_ENV
-        echo "LD_LIBRARY_PATH=$SNPE_LIB_PATH:${{env.CARGO_TARGET_DIR}}" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$SNPE_LIB_PATH:${{ inputs.cargo-target-dir }}" >> $GITHUB_ENV
       shell: bash
 
     # docker上の/work/...という場所に依存したコードがあるため、シンボリックリンクを作成して対応

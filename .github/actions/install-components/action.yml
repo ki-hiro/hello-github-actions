@@ -48,7 +48,8 @@ runs:
       shell: bash
 
     - name: Install required packages
-      run: |          
+      run: |
+        # ccが環境に含まれていないためにcargo buildが失敗する。そのため、build-essentialを入れている
         sudo apt update
         sudo apt install -y build-essential libeigen3-dev ${{ inputs.additional-apt-pkg }}
       shell: bash

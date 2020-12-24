@@ -38,6 +38,7 @@ runs:
       run: |
         sudo ln -s `pwd` /work
         ls /work
+      shell: bash
 
     - name: Install required packages
       run: |          

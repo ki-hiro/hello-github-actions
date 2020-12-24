@@ -1,8 +1,8 @@
 name: 'Install build components'
 description: 'Install build components'
 inputs:
-  additional-apt:
-    description: 'additional packages installed by apt'
+  additional-apt-pkg:
+    description: 'Additionally install specified apt packages'
     required: true
     default: ''
   protobuf-version:
@@ -13,12 +13,55 @@ inputs:
     description: 'Rust version'
     required: true
     default: 'nightly-2020-08-29'
+  snpe-version:
+    description: 'SNPE version'
+    required: true
+    default: '1.42'
+  enable-rust-android:
+    description: 'Using Rust target aarch64-linux-android'
+    required: true
+    default: false
 runs:
   using: "composite"
-  steps: 
-    - run: echo additional-apt ${{ inputs.additional-apt }}.
+  steps:
+    - name: Show inputs
+      run: |
+        echo additional-apt-pkg ${{ inputs.additional-apt-pkg }}
+        echo protobuf-version ${{ inputs.protobuf-version }}
+        echo rust-version ${{ inputs.rust-version }}
+        echo snpe-version ${{ inputs.snpe-version }}
+        echo enable-rust-android ${{ inputs.enable-rust-android }}
       shell: bash
-    - run: echo protobuf-version ${{ inputs.protobuf-version }}.
+
+    # docker上の/work/...という場所に依存したコードがあるため、シンボリックリンクを作成して対応
+    - name: Register working directory
+      run: |
+        sudo ln -s `pwd` /work
+        ls /work
+
+    - name: Install required packages
+      run: |          
+        sudo apt update
+        sudo apt install -y build-essential libeigen3-dev ${{ inputs.additional-apt-pkg }}
       shell: bash
-    - run: echo rust-version ${{ inputs.rust-version }}.
+
+    - name: Install Protoc
+      run: |
+        # install proto
+        export PROTOBUF_VERSION=${{ inputs.protobuf-version }}
+        curl -sOL https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
+        unzip -q protoc-${PROTOBUF_VERSION}-linux-x86_64.zip -d protoc3
+        sudo mv protoc3/bin/* /usr/local/bin/
+        sudo mv protoc3/include/* /usr/local/include/
+        rm protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
+      shell: bash
+
+    - name: Install Rust
+      run: |
+        export RUST_VERSION=${{ inputs.rust-version }}
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain ${RUST_VERSION} -y
+        #rustup override set ${{ inputs.rust-version }}
+        # TODO: if分岐
+        rustup target add aarch64-linux-android
+        rustup component add rustfmt clippy
       shell: bash

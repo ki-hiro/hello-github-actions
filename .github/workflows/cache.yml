@@ -36,8 +36,10 @@ jobs:
             components: rustfmt, clippy
 
       - name: Install cargo-udeps
-        run: cargo install cargo-udeps --version ${{ env.CARGO_UDEPS_VERSION }}
+        run: cargo install cargo-udeps --version ${{ env.CARGO_UDEPS_VERSION }} || true
 
       - name: Check unused dependencies with cargo-udeps
-        run: cargo udeps --all-targets
+        run: |
+          cargo udeps --version
+          cargo udeps --all-targets
         working-directory: sample1

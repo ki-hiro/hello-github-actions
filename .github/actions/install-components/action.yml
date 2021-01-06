@@ -1,0 +1,72 @@
+name: 'Install components'
+description: 'Install components'
+inputs:
+  additional-apt-pkg:
+    description: 'Additionally install specified apt packages'
+    default: ''
+  protobuf-version:
+    description: 'protobuf version'
+    default: '3.2.0'
+  rust-version:
+    description: 'Rust version'
+    default: 'nightly-2020-08-29'
+  enable-rust-android:
+    description: 'Using Rust target aarch64-linux-android'
+    default: false
+  snpe-version:
+    description: 'SNPE version'
+    default: '1.42'
+  cargo-target-dir:
+    description: 'CARGO_TARGET_DIR'
+    default: '/work/chart-edge-ai/target'
+runs:
+  using: "composite"
+  steps:
+    # 必要環境変数を設定。set-envは非推奨になったので使わない
+    #   See: https://qiita.com/shonansurvivors/items/f256a0443d346f09448e
+    - name: Set environment variables
+      run: |
+        export SNPE_LIB_PATH=/work/chart-edge-ai/snpe-rs/snpe-sys/snpe-c-api/external/snpe_${{ inputs.snpe-version }}/lib/x86_64-linux-clang
+        echo "CARGO_TARGET_DIR=${{ inputs.cargo-target-dir }}" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$SNPE_LIB_PATH:${{ inputs.cargo-target-dir }}/debug" >> $GITHUB_ENV
+        echo "SNPE_VERSION=${{ inputs.snpe-version }}" >> $GITHUB_ENV
+      shell: bash
+
+    # docker上の/work/...という場所に依存したコードがあるため、シンボリックリンクを作成して対応
+    - name: Register working directory
+      run: |
+        sudo ln -s `pwd` /work
+        ls /work
+      shell: bash
+
+    # ビルド/実行に必要なpackageのインストール
+    # ccが環境に含まれていないためにcargo buildが失敗する。そのため、build-essentialを入れている
+    - name: Install required packages
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential libeigen3-dev ${{ inputs.additional-apt-pkg }}
+      shell: bash
+
+    - name: Install Protoc
+      run: |
+        # install proto
+        export PROTOBUF_VERSION=${{ inputs.protobuf-version }}
+        curl -sOL https://github.com/google/protobuf/releases/download/v${PROTOBUF_VERSION}/protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
+        unzip -q protoc-${PROTOBUF_VERSION}-linux-x86_64.zip -d protoc3
+        sudo mv protoc3/bin/* /usr/local/bin/
+        sudo mv protoc3/include/* /usr/local/include/
+        rm protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
+      shell: bash
+
+    - name: Install Rust
+      run: |
+        export RUST_VERSION=${{ inputs.rust-version }}
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain ${RUST_VERSION} -y
+        #rustup override set ${{ inputs.rust-version }}
+        
+        if "${{ inputs.enable-rust-android }}"; then
+          rustup target add aarch64-linux-android
+        fi
+
+        rustup component add rustfmt clippy
+      shell: bash

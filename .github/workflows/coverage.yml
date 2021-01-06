@@ -3,6 +3,7 @@ on: pull_request
 
 jobs:
   test-cov-report:
+    if: false
     name: Test code coverage report
     runs-on: ubuntu-latest
     env:

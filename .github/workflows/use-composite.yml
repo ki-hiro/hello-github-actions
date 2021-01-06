@@ -1,0 +1,39 @@
+name: Sample for using composite run steps action
+on: push
+
+jobs:
+  test-composite:
+    name: Test composite run steps action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run composite
+        uses: ./.github/actions/composite-test
+        with:
+          who-to-greet: test-composite
+      - name: Run composite 2nd
+        uses: ./.github/actions/composite-test
+        with:
+          who-to-greet: test-composite
+          flag: false
+  test-install-components:
+    name: Test composite run steps action (install-components)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run install-components
+        uses: ./.github/actions/install-components
+        with:
+          additional-apt-pkg: libopencv-dev
+      
+      - name: Show environment variables
+        run: |
+          echo $CARGO_TARGET_DIR
+          echo $LD_LIBRARY_PATH
+
+      - name: test cargo
+        working-directory: /work/sample1
+        run: |
+          cargo --version
+          cargo test

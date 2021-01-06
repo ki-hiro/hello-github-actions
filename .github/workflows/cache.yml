@@ -3,6 +3,7 @@ on: push
 
 env:
     RUST_VERSION: nightly-2020-08-29
+    CARGO_UDEPS_VERSION: 0.1.16
 
 jobs:
   test-cache:
@@ -18,7 +19,7 @@ jobs:
         with:
           path: |
             ~/.cargo/bin/
-          key: ${{ runner.os }}-cargo-udeps
+          key: ${{ runner.os }}-cargo-udeps-${{ env.CARGO_UDEPS_VERSION }}
 
       - name: Install required packages
         run: |
@@ -35,4 +36,4 @@ jobs:
             components: rustfmt, clippy
 
       - name: Install cargo-udeps
-        run: cargo install cargo-udeps --version 0.1.16
+        run: cargo install cargo-udeps --version ${{ env.CARGO_UDEPS_VERSION }}

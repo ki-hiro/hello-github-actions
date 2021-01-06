@@ -24,9 +24,9 @@ jobs:
 
       - name: Install required packages
         run: |
-          apt update
+          sudo apt update
           # ccが環境に含まれていないためにcargo buildが失敗する。そのため、build-essentialを入れる
-          apt install -y build-essential libssl-dev
+          sudo apt install -y build-essential libssl-dev
 
       - name: Install Rust nightly
         uses: actions-rs/toolchain@v1

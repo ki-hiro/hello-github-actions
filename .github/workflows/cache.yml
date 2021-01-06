@@ -37,3 +37,7 @@ jobs:
 
       - name: Install cargo-udeps
         run: cargo install cargo-udeps --version ${{ env.CARGO_UDEPS_VERSION }}
+
+      - name: Check unused dependencies with cargo-udeps
+        run: cargo udeps --all-targets
+        working-directory: sample1

@@ -18,8 +18,6 @@ jobs:
         with:
           path: |
             ~/.cargo/bin/
-            ~/.cargo/registry
-            ~/.cargo/git
           key: ${{ runner.os }}-cargo-udeps
 
       - name: Install required packages

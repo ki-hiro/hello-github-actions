@@ -1,0 +1,46 @@
+name: Comntinuous Integration
+on: push
+
+env:
+    RUST_VERSION: nightly-2020-08-29
+    CARGO_UDEPS_VERSION: 0.1.16
+
+jobs:
+  test-cache:
+    name: Cache Test
+    runs-on: ubuntu-latest
+    if: false
+    # setup-nodeが正常に機能しないので無効化しておく
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      - name: Cache cargo udeps
+        uses: actions/cache@v1
+        with:
+          path: |
+            ~/.cargo/bin/
+          key: ${{ runner.os }}-cargo-udeps-${{ env.CARGO_UDEPS_VERSION }}
+
+      - name: Install required packages
+        run: |
+          sudo apt update
+          # ccが環境に含まれていないためにcargo buildが失敗する。そのため、build-essentialを入れる
+          sudo apt install -y build-essential libssl-dev
+
+      - name: Install Rust nightly
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: ${{env.RUST_VERSION}}
+            target: aarch64-linux-android
+            override: true
+            components: rustfmt, clippy
+
+      - name: Install cargo-udeps
+        run: cargo install cargo-udeps --version ${{ env.CARGO_UDEPS_VERSION }} || true
+
+      - name: Check unused dependencies with cargo-udeps
+        run: |
+          cargo udeps --version
+          cargo udeps --all-targets
+        working-directory: sample1

@@ -28,4 +28,4 @@ jobs:
         uses: actions/checkout@v2.0.0
       - name: Temporal
         run: |
-          echo ${{ github.event }}
+          echo ${{ toJSON(github) }}

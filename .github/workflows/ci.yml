@@ -22,5 +22,10 @@ jobs:
   # TODO: master push時に適当なファイルをartifactとしてupload
   on-push-master:
     name: Event push master
-    run: |
-      echo ${{ github.event }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+      - name: Temporal
+        run: |
+          echo ${{ github.event }}

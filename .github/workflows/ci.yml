@@ -19,3 +19,8 @@ jobs:
       - name: Test
         run: npm test
 
+  # TODO: master push時に適当なファイルをartifactとしてupload
+  on-push-master:
+    name: Event push master
+    run: |
+      echo ${{ github.event }}

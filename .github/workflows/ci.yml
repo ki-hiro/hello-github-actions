@@ -3,7 +3,7 @@ on: push
 
 jobs:
   unit-test:
-    name: Unit Testt
+    name: Unit Test
     runs-on: ubuntu-latest
     # setup-nodeが正常に機能しないので無効化しておく
     if: false

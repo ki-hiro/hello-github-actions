@@ -1,3 +1,4 @@
+name: Workflow for merge pull request
 on:
   pull_request:
     branches:

@@ -5,6 +5,7 @@ jobs:
   test-cov-report:
     name: Test code coverage report
     runs-on: ubuntu-latest
+    if: false
     env:
       PARAMS:
         -v --root ./sample1 --ignore-tests -o Html Lcov --output-dir .
@@ -23,3 +24,20 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./lcov.info
           lcov-base: ./sample1/lcov.info.base
+
+  test-download-artifact:
+    name: Upload coverage report
+    runs-on: ubuntu-18.04
+    if: false
+    steps:
+      - name: download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: workflow_merged_pr.yml
+          branch: master
+          path: base_coverage
+          name: my-artifact
+
+      - name: show artifact
+        run: |
+          find base_coverage -type f

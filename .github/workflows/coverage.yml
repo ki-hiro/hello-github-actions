@@ -28,7 +28,6 @@ jobs:
   test-download-artifact:
     name: Upload coverage report
     runs-on: ubuntu-18.04
-    if: false
     steps:
       - name: download artifact
         uses: dawidd6/action-download-artifact@v2

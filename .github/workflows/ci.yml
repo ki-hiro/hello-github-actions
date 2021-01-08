@@ -3,7 +3,7 @@ on: push
 
 jobs:
   unit-test:
-    name: Unit Testt
+    name: Unit Test
     runs-on: ubuntu-latest
     # setup-nodeが正常に機能しないので無効化しておく
     if: false
@@ -19,3 +19,14 @@ jobs:
       - name: Test
         run: npm test
 
+  # TODO: master push時に適当なファイルをartifactとしてupload
+  on-push-master:
+    name: Event push master
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+      - name: Temporal
+        run: |
+          echo ${{ toJSON(github) }}

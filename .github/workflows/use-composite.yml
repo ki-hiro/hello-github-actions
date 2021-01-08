@@ -19,6 +19,7 @@ jobs:
   test-install-components:
     name: Test composite run steps action (install-components)
     runs-on: ubuntu-latest
+    if: false
     steps:
       - uses: actions/checkout@v2
 

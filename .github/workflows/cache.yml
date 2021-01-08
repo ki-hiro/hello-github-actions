@@ -1,4 +1,4 @@
-name: Comntinuous Integration
+name: Cache test
 on: push
 
 env:

@@ -1,0 +1,29 @@
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  tag:
+    name: Upload file when pull request is merged
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    env:
+      PARAMS:
+        -v --root ./sample1 --ignore-tests -o Html Lcov --output-dir .
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      - name: Run cargo-tarpaulin
+        uses: actions-rs/tarpaulin@v0.1
+        with:
+          version: '0.13.3'
+          args: ${{env.PARAMS}}
+
+      - name: Upload file as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: ./lcov.info

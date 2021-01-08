@@ -23,10 +23,3 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./lcov.info
-
-      # TODO: 実験。あとで消す
-      - name: Upload file as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: ./lcov.info

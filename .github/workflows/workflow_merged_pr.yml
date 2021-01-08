@@ -1,17 +1,20 @@
-name: Coverage test
-on: pull_request
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
 
 jobs:
-  test-cov-report:
-    name: Test code coverage report
+  tag:
+    name: Upload file when pull request is merged
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     env:
-      # TODO: パラメータの二重メンテは面倒なので、workspace-coverageはなくす(こちらで統一する)
       PARAMS:
         -v --root ./sample1 --ignore-tests -o Html Lcov --output-dir .
-    if: false
     steps:
-      - uses: actions/checkout@v2.0.0
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
 
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1
@@ -25,7 +28,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./lcov.info
 
-      # TODO: 実験。あとで消す
       - name: Upload file as artifact
         uses: actions/upload-artifact@v2
         with:

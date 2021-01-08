@@ -13,8 +13,11 @@ jobs:
       PARAMS:
         -v --root ./sample1 --ignore-tests -o Html Lcov --output-dir .
     steps:
+      # closedのタイミングだとcheckoutに失敗する問題があったので、暫定対処でrefを設定している
       - name: Checkout
         uses: actions/checkout@v2.0.0
+        with:
+          ref: ${{ github.ref }}
 
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1

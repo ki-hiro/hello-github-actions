@@ -33,7 +33,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: workflow_merged_pr.yml
-          branch: master
+          commit: ${{ github.event.pull_request.base.sha }}
           path: base_coverage
           name: my-artifact
 

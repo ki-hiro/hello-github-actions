@@ -22,12 +22,6 @@ jobs:
           version: '0.13.3'
           args: ${{env.PARAMS}}
 
-      - name: Apply code coverage report
-        uses: romeovs/lcov-reporter-action@v0.2.16
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./lcov.info
-
       - name: Upload file as artifact
         uses: actions/upload-artifact@v2
         with:

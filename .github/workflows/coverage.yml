@@ -5,8 +5,8 @@ jobs:
   test-cov-report:
     name: Test code coverage report
     runs-on: ubuntu-latest
+    if: false
     env:
-      # TODO: パラメータの二重メンテは面倒なので、workspace-coverageはなくす(こちらで統一する)
       PARAMS:
         -v --root ./sample1 --ignore-tests -o Html Lcov --output-dir .
     steps:
@@ -19,7 +19,24 @@ jobs:
           args: ${{env.PARAMS}}
 
       - name: Apply code coverage report
-        uses: romeovs/lcov-reporter-action@v0.2.16
+        uses: romeovs/lcov-reporter-action@v0.2.19
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./lcov.info
+          lcov-base: ./sample1/lcov.info.base
+
+  test-download-artifact:
+    name: Upload coverage report
+    runs-on: ubuntu-18.04
+    steps:
+      - name: download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: workflow_merged_pr.yml
+          branch: master
+          path: base_coverage
+          name: my-artifact
+
+      - name: show artifact
+        run: |
+          find base_coverage -type f

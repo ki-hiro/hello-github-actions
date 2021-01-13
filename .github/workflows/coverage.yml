@@ -32,7 +32,8 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: workflow_pushed_master.yml
-          commit: ${{ github.event.pull_request.base.sha }}
+          #commit: ${{ github.event.pull_request.base.sha }}
+          branch: master
           path: base_coverage
           name: my-artifact
 

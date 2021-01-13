@@ -27,7 +27,7 @@ jobs:
           name: my-artifact
 
       - name: Apply code coverage report
-        uses: romeovs/lcov-reporter-action@v0.2.16
+        uses: romeovs/lcov-reporter-action@v0.2.19
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./lcov.info

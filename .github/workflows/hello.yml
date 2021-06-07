@@ -7,9 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Hello, Github Actions!"
+      - run: |
+        echo "line1" \
+             "line2"
   
   check-tmate:
     name: Check tmate
+    if: false
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout

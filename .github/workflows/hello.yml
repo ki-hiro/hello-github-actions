@@ -7,3 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Hello, Github Actions!"
+      - run: |
+        echo "line1" \
+             "line2"
+  
+  check-tmate:
+    name: Check tmate
+    if: false
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3.5

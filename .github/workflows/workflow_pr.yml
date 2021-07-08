@@ -1,0 +1,13 @@
+name: workflow for coverage report (chart-edge-ai)
+on: pull_request
+
+jobs:
+  pr-job:
+    name: Job on PR
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Echo
+        run: |
+          echo hogehoge

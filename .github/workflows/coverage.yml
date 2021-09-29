@@ -5,6 +5,7 @@ jobs:
   test-cov-report:
     name: Test code coverage report
     runs-on: ubuntu-latest
+    if: false
     env:
       # TODO: パラメータの二重メンテは面倒なので、workspace-coverageはなくす(こちらで統一する)
       PARAMS:

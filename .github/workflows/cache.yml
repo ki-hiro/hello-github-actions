@@ -44,3 +44,33 @@ jobs:
           cargo udeps --version
           cargo udeps --all-targets
         working-directory: sample1
+
+  test-cache2:
+    name: Cache Test
+    runs-on: ubuntu-latest
+    # setup-nodeが正常に機能しないので無効化しておく
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      - name: Install required packages
+        run: |
+          sudo apt update
+          # ccが環境に含まれていないためにcargo buildが失敗する。そのため、build-essentialを入れる
+          sudo apt install -y build-essential libssl-dev
+
+      - name: Install Rust stable
+        run: |
+          export RUST_VERSION=1.54.0
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain ${RUST_VERSION} -y
+
+      - name: Build rust project
+        working-directory: sample1
+        run: |
+          cargo build
+          echo `pwd`
+          ls -a
+          cd $HOME
+          echo `pwd`
+          ls -a
+          cd -

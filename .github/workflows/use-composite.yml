@@ -5,6 +5,7 @@ jobs:
   test-composite:
     name: Test composite run steps action
     runs-on: ubuntu-latest
+    if: false
     steps:
       - uses: actions/checkout@v2
       - name: Run composite

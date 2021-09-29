@@ -67,7 +67,7 @@ jobs:
       - name: Build rust project
         working-directory: sample1
         run: |
-          cargo build sample1
+          cargo build
           echo `pwd`
           ls -a
           cd $HOME
